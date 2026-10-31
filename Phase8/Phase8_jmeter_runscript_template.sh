@@ -5,7 +5,7 @@ set -euo pipefail
 # Requires: JMeter installed and JMX files exist.
 
 JMETER_BIN="${JMETER_BIN:-jmeter}"  # override if needed
-JMX_FILE="${1:-auth_login_register.jmx}"
+JMX_FILE="${1:-auth_register_login.jmx}"
 
 THREADS="${THREADS:-25}"
 RAMP_UP="${RAMP_UP:-10}"

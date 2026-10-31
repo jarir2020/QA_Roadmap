@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="5.1">
+  <!--
+    NOTE:
+    This is a placeholder starter .jmx for Phase 8.
+    Because JMeter GUI generation is complex, in this repo we provide a template-like JMX.
+
+    Endpoints (UI-driven HTMX):
+    - POST /register.php (fields: email, password)
+    - POST /login.php (fields: email, password)
+
+    You should open this in JMeter and adjust thread groups, assertions, and listeners.
+  -->
+  <hashTree>
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Auth register + login" enabled="true">
+      <stringProp name="TestPlan.comments">Generated starter for Phase 8</stringProp>
+    </TestPlan>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>
