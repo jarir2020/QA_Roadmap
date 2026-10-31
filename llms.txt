@@ -1,0 +1,3 @@
+LLMs used for this repo (placeholders)
+- Copilot SDK in VS Code
+- (Add models/agents you used locally)
