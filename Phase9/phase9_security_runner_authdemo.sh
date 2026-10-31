@@ -19,8 +19,8 @@ echo "OK: dashboard blocks unauthenticated (http_code=$resp_code)"
 rm -f "$COOKIE_JAR" || true
 body=$(curl -sS -X POST "$BASE_URL/login.php" \
   -d "email=noone@example.com" \
-  -d "password=WrongPassword!" \
-  -H "Content-Type: application/x-www-form-urlencoded" \ 
+  -d "${PASS:-Password123!}" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
   || true)
 
 # Basic check (demo text)
@@ -36,8 +36,8 @@ fi
 EMAIL="p9_$(date +%s)@example.com"
 PASS="Password123!"
 
-curl -sS -X POST "$BASE_URL/register.php" -d "email=$EMAIL" -d "password=$PASS" -H "Content-Type: application/x-www-form-urlencoded" >/dev/null
-curl -sS -X POST "$BASE_URL/login.php" -d "email=$EMAIL" -d "password=$PASS" -H "Content-Type: application/x-www-form-urlencoded" -c "$COOKIE_JAR" >/dev/null
+curl -sS -X POST "$BASE_URL/register.php" -d "email=$EMAIL" -d "${PASS:-Password123!}" -H "Content-Type: application/x-www-form-urlencoded" >/dev/null
+curl -sS -X POST "$BASE_URL/login.php" -d "email=$EMAIL" -d "${PASS:-Password123!}" -H "Content-Type: application/x-www-form-urlencoded" -c "$COOKIE_JAR" >/dev/null
 
 # Confirm dashboard ok
 resp_code2=$(curl -sS -o /tmp/p9_dash_authed.html -w "%{http_code}" "$BASE_URL/dashboard.php" -b "$COOKIE_JAR")
