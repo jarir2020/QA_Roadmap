@@ -42,7 +42,9 @@ def get_coordinates_for_upazilla_unions(api_key, input_file, output_file, max_wo
             file.write(f"{union}: {coords[0]}, {coords[1]}\n")
 
 if __name__ == "__main__":
-    google_maps_api_key = "AIzaSyBh3zMkqNw5ffw3ZDloZgvm5yJOHUvTm9U"
+    google_maps_api_key = os.environ.get("GOOGLE_MAPS_API_KEY", "")
+    if not google_maps_api_key:
+        raise RuntimeError("GOOGLE_MAPS_API_KEY env var is required")
     input_file_path = "input_unions.txt"
     output_file_path = "output_coordinates.txt"
 
