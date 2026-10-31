@@ -14,6 +14,7 @@ BASE_URL="${BASE_URL:-http://127.0.0.1:8030}"
 
 EMAIL="${EMAIL:-phase5_user_$(date +%s)@example.com}"
 PASSWORD="${PASSWORD:-Password123!}"
+
 COOKIE_JAR="${COOKIE_JAR:-/tmp/authdemo_phase5_cookies.txt}"
 RUN_DIR="${RUN_DIR:-/tmp/phase5_authdemo_$(date +%F_%H-%M-%S)}"
 
@@ -25,15 +26,18 @@ mysql_cmd() {
 
 snap() {
   local tag="$1"
-  mysql_cmd -e "SELECT id, email, is_active, created_at, LENGTH(password_hash) AS hash_len FROM users ORDER BY id;" > "$RUN_DIR/users_${tag}.csv"
+  mysql_cmd -e \
+    "SELECT id, email, is_active, created_at, LENGTH(password_hash) AS hash_len FROM users ORDER BY id;" \
+    > "$RUN_DIR/users_${tag}.csv"
 }
 
 echo "[Phase5] Run dir: $RUN_DIR"
+echo "[Phase5] Using EMAIL=$EMAIL"
 
 echo "[Phase5] Snapshot BEFORE"
 snap "before"
 
-# Register
+# Register (HTMX UI returns HTML snippet; DB check is source of truth)
 curl -sS -X POST "$BASE_URL/register.php" \
   -d "email=$EMAIL" \
   -d "password=$PASSWORD" \
@@ -55,18 +59,34 @@ curl -sS -X GET "$BASE_URL/dashboard.php" -b "$COOKIE_JAR" \
 echo "[Phase5] Snapshot AFTER"
 snap "after"
 
-# Basic diff summary (count + email presence)
-BEFORE_COUNT=$(wc -l < "$RUN_DIR/users_before.csv" | tr -d ' ') || true
-AFTER_COUNT=$(wc -l < "$RUN_DIR/users_after.csv" | tr -d ' ') || true
+BEFORE_COUNT=$(($(wc -l < "$RUN_DIR/users_before.csv") - 1))
+AFTER_COUNT=$(($(wc -l < "$RUN_DIR/users_after.csv") - 1))
 
-echo "[Phase5] users row lines before: $BEFORE_COUNT"
-echo "[Phase5] users row lines after:  $AFTER_COUNT"
+echo "[Phase5] users rows before: $BEFORE_COUNT"
+echo "[Phase5] users rows after:  $AFTER_COUNT"
 
-grep -n "$EMAIL" "$RUN_DIR/users_before.csv" > /dev/null || true
-if grep -q "$EMAIL" "$RUN_DIR/users_after.csv"; then
-  echo "[Phase5] OK: seeded email present in AFTER snapshot"
+def check_email_present() {
+  local file="$1"
+  if grep -q "^.*\t$EMAIL\t" "$file"; then
+    echo "1"; return 0
+  fi
+  echo "0"; return 0
+}
+
+PRESENT_BEFORE=$(check_email_present "$RUN_DIR/users_before.csv")
+PRESENT_AFTER=$(check_email_present "$RUN_DIR/users_after.csv")
+
+echo "[Phase5] email present before: $PRESENT_BEFORE"
+echo "[Phase5] email present after:  $PRESENT_AFTER"
+
+if [[ "$PRESENT_BEFORE" == "0" && "$PRESENT_AFTER" == "1" ]]; then
+  echo "[Phase5] OK: registration created the expected user row."
+elif [[ "$PRESENT_AFTER" == "1" ]]; then
+  echo "[Phase5] WARNING: email already existed or DB was not clean; still found after."
 else
-  echo "[Phase5] WARNING: seeded email NOT found in AFTER snapshot"
+  echo "[Phase5] FAIL: email not found after registration/login."
+  echo "[Phase5] Debug: last lines of register_response.html"
+  tail -n 40 "$RUN_DIR/register_response.html" || true
 fi
 
 echo "[Phase5] Done. Evidence in $RUN_DIR"
