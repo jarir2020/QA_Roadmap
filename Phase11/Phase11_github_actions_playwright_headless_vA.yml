@@ -1,0 +1,92 @@
+name: AuthDemo Playwright (headless) - start PHP + DB
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: sqa_demo_auth
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -p$MYSQL_ROOT_PASSWORD"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql
+
+      - name: Load DB schema
+        run: |
+          mysql -h 127.0.0.1 -u root -proot sqa_demo_auth < Phase1/AuthDemo/database/schema.sql
+
+      - name: Start PHP server
+        run: |
+          php -S 127.0.0.1:8030 -t Phase1/AuthDemo/public > /tmp/php-server.log 2>&1 &
+          echo $! > /tmp/php-server.pid
+
+          # wait for server
+          for i in {1..30}; do
+            if curl -fsS http://127.0.0.1:8030/login.php > /dev/null; then
+              echo "PHP server is up"
+              exit 0
+            fi
+            sleep 1
+          done
+          echo "PHP server failed to start"
+          cat /tmp/php-server.log || true
+          exit 1
+
+      - name: Install system deps for Playwright
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends curl ca-certificates
+
+      - name: Install Playwright deps
+        working-directory: Phase6
+        run: |
+          npm ci
+
+      - name: Install Playwright browsers
+        working-directory: Phase6
+        run: |
+          npx playwright install chromium
+
+      - name: Run Playwright tests
+        working-directory: Phase6
+        env:
+          BASE_URL: http://127.0.0.1:8030
+        run: |
+          # Ensure environment for DB credentials (AuthDemo reads .env if present)
+          cp -f ../Phase1/AuthDemo/.env.example ../Phase1/AuthDemo/.env || true
+
+          npm exec playwright test
+
+      - name: Stop PHP server
+        if: always()
+        run: |
+          if [ -f /tmp/php-server.pid ]; then
+            kill $(cat /tmp/php-server.pid) || true
+          fi
