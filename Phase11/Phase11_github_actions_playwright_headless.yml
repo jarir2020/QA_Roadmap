@@ -1,0 +1,39 @@
+name: AuthDemo Playwright (headless)
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  playwright:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Setup Node
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Install dependencies
+      - name: Install Playwright deps
+        working-directory: Phase6
+        run: |
+          npm ci
+
+      # Install browsers
+      - name: Install Playwright browsers
+        working-directory: Phase6
+        run: |
+          npx playwright install chromium
+
+      # Run tests (assumes PHP server already accessible externally)
+      - name: Run Playwright tests
+        working-directory: Phase6
+        env:
+          BASE_URL: http://127.0.0.1:8030
+        run: |
+          npm exec playwright test

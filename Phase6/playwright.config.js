@@ -7,7 +7,7 @@ module.exports = defineConfig({
   expect: { timeout: 5_000 },
   retries: 1,
   use: {
-    baseURL: 'http://127.0.0.1:8030',
+    baseURL: process.env.BASE_URL || 'http://127.0.0.1:8030',
     trace: 'on-first-retry',
   },
   projects: [
