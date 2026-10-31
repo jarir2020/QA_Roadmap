@@ -65,7 +65,7 @@ AFTER_COUNT=$(($(wc -l < "$RUN_DIR/users_after.csv") - 1))
 echo "[Phase5] users rows before: $BEFORE_COUNT"
 echo "[Phase5] users rows after:  $AFTER_COUNT"
 
-def check_email_present() {
+check_email_present() {
   local file="$1"
   if grep -q "^.*\t$EMAIL\t" "$file"; then
     echo "1"; return 0
