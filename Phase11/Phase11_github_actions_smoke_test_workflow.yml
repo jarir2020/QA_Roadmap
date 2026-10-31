@@ -1,0 +1,35 @@
+name: AuthDemo Smoke Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: pdo_mysql
+
+      - name: Start MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          user: root
+          password: root
+          database: sqa_demo_auth
+
+      - name: Load schema
+        run: |
+          mysql -h 127.0.0.1 -u root -proot sqa_demo_auth < Phase1/AuthDemo/database/schema.sql
+
+      - name: Run lightweight smoke (manual instructions)
+        run: |
+          echo "Start server manually in this workflow if needed; UI flows are hard to do headlessly without Playwright."
