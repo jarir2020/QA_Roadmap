@@ -27,3 +27,9 @@ A short summary markdown:
 - which tool you liked and why
 - what you learned about reliability
 - one screenshot or evidence link per tool
+
+## Theory: compare capabilities in context
+
+Frameworks differ in how they drive browsers, locate elements, wait for conditions, isolate state, run tests in parallel, and expose debugging evidence. Those mechanisms affect reliability and maintenance, but the outcome also depends on test design and application behavior. For example, an unstable test-data setup can make two frameworks look flaky even when the browser controls are sound.
+
+Separate observed facts from preference: record what happened in the same scenario, then explain why a particular capability matters for the target team. Recheck framework and browser support against current project requirements before making a long-term adoption decision.

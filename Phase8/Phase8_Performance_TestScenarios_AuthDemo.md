@@ -46,3 +46,9 @@
 - Record avg + p95/p99 latency
 - Record errors by HTTP status code
 - Note bottlenecks and propose mitigations
+
+## Theory: baseline, load, stress, and spike answer different questions
+
+A baseline records behavior under light, stable demand. A load test asks whether expected demand meets agreed service objectives. A stress test deliberately approaches or exceeds capacity to discover failure modes and recovery behavior. A spike test changes demand abruptly to examine how quickly the system absorbs and sheds pressure. These labels describe workload intent; the thread counts above are practice values, not capacity claims.
+
+Every scenario needs a defined workload, duration, data strategy, and pass threshold. Repeated registration with the same identity mostly measures duplicate handling rather than successful creation. Login load should use controlled credentials and a cookie policy that matches whether each request represents a new or continuing session. Record recovery after load stops, not only peak behavior.

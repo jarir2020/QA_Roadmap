@@ -28,3 +28,11 @@
 ## Credentials / test data
 - Use unique emails for registration to avoid duplicate failures.
 - Password: `Password123!`
+
+## Theory: validate the plan before generating load
+
+The checked-in JMX file is an empty starter plan; it contains no HTTP samplers yet. The run-script template can invoke JMeter, but a generated report from an unconfigured plan is not evidence that AuthDemo was exercised. Build and run one single-user request first, inspect its request and response, then scale the workload.
+
+For this HTMX-based demo, add the HX-Request header to POST samplers so the server processes the form action. Use a cookie manager when a later dashboard request must reuse a login session. Keep registration data unique, and add response assertions that distinguish a real action result from a generic page response.
+
+A performance result should be reported with the workload and environment, including concurrency, ramp-up, duration, payloads, browser-independent HTTP behavior, and server/database setup. The numbers in example scenarios are learning values, not a service-level objective.

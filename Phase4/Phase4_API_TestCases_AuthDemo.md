@@ -5,6 +5,7 @@
 
 ## Common request headers (for form posts)
 - `Content-Type: application/x-www-form-urlencoded`
+- `HX-Request: true` (required by the current handlers to process the HTMX form action)
 
 ## Test Cases
 
@@ -110,3 +111,11 @@ Then GET `/dashboard.php`
 ## Generic safety checks
 - Error messages should be generic: "Invalid email or password" for both wrong password and non-existent user.
 - Session cookie should exist after successful login and be required for dashboard.
+
+## Theory: test the protocol boundary and session continuity
+
+The word API does not imply JSON or a separate REST service. These examples exercise server-side form handlers that return HTML fragments for HTMX. The request method, body encoding, and HX-Request header determine which handler path runs; omitting a required header can make a test pass against the wrong behavior.
+
+A session is carried across otherwise independent HTTP requests through a cookie. Test login by capturing that cookie, then use the same cookie jar for the protected dashboard request. A curl client will not execute the JavaScript redirect in the login response, so assert the server response and make the next request explicitly.
+
+For each case, separate response assertions from state assertions: a message can be present while persistence or authorization is wrong. The generic-error cases test a security property; use equivalent request shapes so the comparison is meaningful.

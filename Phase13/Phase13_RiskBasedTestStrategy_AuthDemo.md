@@ -43,3 +43,9 @@ Risk = Likelihood × Impact
 ### Exit PARTIAL conditions
 - P1 issues exist but have workarounds and limited impact
 
+## Theory: use risk to allocate effort, not to claim certainty
+
+Likelihood and impact are estimates based on current evidence, not objective measurements. A simple product helps sort discussion, but the inputs should include exposure, affected users, detectability, and the cost of failure where those factors matter. Re-rank when architecture, usage, threats, or defect history changes.
+
+Test depth should follow the risk: cover high-impact state transitions and authorization boundaries early, then add representative negative and edge cases. A risk matrix is not a substitute for requirements traceability; it should explain why some checks receive more time and what residual risk remains at release.
+

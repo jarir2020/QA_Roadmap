@@ -151,3 +151,11 @@ CRUD for a single entity (e.g., `Students`):
 
 **Workaround (if any):**
 
+## Theory: derive cases from rules and transitions
+
+Start from a business rule, identify valid and invalid input classes, then select representative values. Equivalence partitioning reduces redundant examples; boundary-value analysis concentrates on values at the edges of stated constraints. For CRUD, model the entity lifecycle as absent → present → modified → removed, and include invalid transitions such as updating an absent entity.
+
+A case is useful when its preconditions make the starting state repeatable, its steps change one meaningful thing, and its expected result is observable. Prefer checking both the response and the resulting state. For multi-user systems, add authorization dimensions such as owner, different user, and administrator. For updates and deletes, include stale or repeated requests when the operation's idempotency or concurrency behavior matters.
+
+Keep test data independent where possible. Shared mutable records create order-dependent cases: one test may delete or edit data another expects. Unique identifiers, resettable fixtures, and explicit cleanup make repeated runs easier to interpret.
+

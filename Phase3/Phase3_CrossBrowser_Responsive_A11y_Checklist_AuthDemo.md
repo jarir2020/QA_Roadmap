@@ -63,3 +63,11 @@ Browsers (examples):
 - Overall status: PASS / FAIL / PARTIAL
 - Issues found (with IDs)
 - Evidence links: screenshots + console/network logs
+
+## Theory: separate viewport, browser, and accessibility risks
+
+Responsive behavior is a relationship between available space and content, not a collection of device names. A viewport sample is useful when it exercises likely layout transitions and constraints; also inspect intermediate widths or zoom when a defect suggests a breakpoint problem. A page can fit one screenshot and still fail when text wraps, validation appears, or the on-screen keyboard reduces visible space.
+
+Cross-browser checks look for behavior that differs across browser engines, versions, and platform APIs. Record the exact browser and operating system because a browser name alone does not identify a reproducible environment. The checklist's browser examples are a selection strategy, not proof of compatibility with every browser or device.
+
+Accessibility is an interaction and information property, not a visual polish pass. Labels expose field purpose to assistive technology, keyboard order exposes reachable actions, focus placement communicates state changes, and contrast supports legibility. A manual checklist is a useful screen, but it does not replace assistive-technology review or automated checks across the whole page.

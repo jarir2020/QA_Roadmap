@@ -37,3 +37,11 @@
 - Block merge/promotion on:
   - smoke test failure
   - critical functional failures
+
+## Theory: CI makes evidence repeatable
+
+Continuous integration runs the same checks against a known revision and environment so a change can be evaluated consistently. Each stage should produce evidence that the next stage can trust: dependencies installed, schema loaded, services healthy, test data prepared, and assertions executed. Health checks should confirm readiness rather than merely that a process was started.
+
+Store credentials in the CI secret store and pass them only to the steps that need them. Treat artifacts as potentially sensitive because HTML, logs, screenshots, and traces may contain account data or tokens. Publish only what helps diagnose a failure, with retention and redaction appropriate to the data.
+
+A merge gate should represent an agreed quality risk, not simply a green workflow. Keep fast, reliable checks early; isolate unstable external dependencies; and make the failure message identify the failed behavior. The workflow examples need deterministic setup, including the demo account used by login and dashboard UI tests.

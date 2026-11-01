@@ -25,3 +25,9 @@ Create automated UI tests for:
 - Add retries in Playwright configuration only if you must.
 - Validate that HTMX updates `#form-result` contents.
 - Keep tests independent but use stable test data when possible.
+
+## Theory: automate stable contracts at the right layer
+
+UI automation verifies the complete browser path, including DOM interaction, HTMX requests, session cookies, and navigation. It is valuable for a small set of critical journeys, while validation partitions and database invariants are often cheaper to cover at lower layers. A balanced suite uses browser tests for user-visible contracts and focused API or unit checks for broad input combinations.
+
+Make each case deterministic: provide a known initial state, use isolated browser context, avoid fixed sleeps, and create unique records when the database persists between runs. A negative test should assert the expected error, not merely the absence of a success phrase. Native browser validation can prevent a request from reaching the server, so distinguish client-side rejection from server-side validation when that distinction matters.

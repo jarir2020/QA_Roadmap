@@ -58,3 +58,11 @@ Collect:
 - Aggregate Report
 - Graphs for latency
 - Errors by response code
+
+## Theory: a load test is a workload model
+
+A load test estimates how a system behaves under a defined pattern of demand. Threads represent simulated users executing the configured path; ramp-up controls how quickly they arrive, and loop or duration settings control how long the workload continues. These settings do not directly guarantee a particular requests-per-second rate because pacing, server response time, and the test plan's request sequence also affect throughput.
+
+Keep the workload realistic enough to answer a question: a baseline establishes normal behavior, a load test checks expected demand, a stress test explores capacity limits, and a spike test observes response to an abrupt change. Define expected error and latency thresholds before running the test. Use unique registration identities and session handling that match the scenario, or test-data collisions can dominate the measurements.
+
+The AuthDemo handlers require the HX-Request header on form POSTs. Include it in the HTTP sampler so the request reaches the registration or login action rather than simply returning the page. Validate that the sampler produces the intended response before adding virtual users.

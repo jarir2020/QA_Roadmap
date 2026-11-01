@@ -334,3 +334,19 @@ Use this as your “final write-up” style.
 3. Pick 5 negative test scenarios (user enumeration, invalid input, locked user).
 
 When you’re ready, tell me and I’ll help you turn those scenarios into a proper Phase 1/Phase 2-ready structure (scenarios → cases).
+
+## 12) Deeper theory: evidence, faults, and coverage
+
+### Test oracles and observability
+A test oracle is the rule or evidence used to decide whether an observed result is correct. For a login test, “the page changed” is too weak by itself: the oracle should also check that the authenticated identity is correct, protected data is visible only to that identity, and the server created the expected session state. Some quality properties have no single exact answer, so testers use several observations—such as response time, logs, accessibility-tree output, or a user-defined acceptance rule.
+
+Observability is the ability to infer what the system did from outputs such as responses, page state, database state, and logs. A useful test makes failures diagnosable: record the input class, preconditions, build/environment, and relevant evidence without exposing passwords or tokens.
+
+### Fault, error, and failure
+A fault is a defect in a requirement, design, or implementation. When execution activates it, the system may enter an incorrect internal state, called an error; if that state becomes visible as behavior that violates an expectation, the user sees a failure. For example, a missing authorization check is a fault, an unauthorized request being treated as approved is an erroneous state, and confidential data appearing in the response is the failure. This model helps locate the right layer to investigate while keeping the user-visible impact central to triage.
+
+### Coverage is evidence, not a quality score
+Coverage describes which part of a chosen model has been exercised: requirements, user journeys, input partitions, decision branches, or code statements. High coverage can coexist with weak assertions, missing risks, or unrealistic test data. Use a coverage model that matches the question being asked, connect important requirements to tests, and state what remains uncovered. A percentage alone cannot prove correctness.
+
+### Why risk guides test depth
+Testing time is limited, so depth should reflect both likelihood and impact. A simple prioritization model is risk = likelihood × impact; it is a conversation aid rather than a precise prediction. For authentication, credential acceptance, session creation, authorization, and logout deserve more attention than a cosmetic label because failure can expose accounts or data. Revisit priorities when requirements, architecture, or threat assumptions change.

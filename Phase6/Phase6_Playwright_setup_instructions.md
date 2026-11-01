@@ -22,3 +22,9 @@ npx playwright test
 - Register success message appears in `#form-result`
 - Wrong login shows generic error
 - Dashboard shows user email after valid login
+
+## Theory: the test runner and browser are separate dependencies
+
+Installing the Playwright test package supplies the test runner and browser-control API; installing the browser binaries supplies the actual engines that the runner launches. The application server and its database are separate prerequisites and must be ready before a test can observe the user journey. A failure to launch a browser is different from a failed application assertion, so keep setup diagnostics distinct.
+
+A test should wait for state, not elapsed time. Locator and URL assertions retry until their condition is met or the configured timeout expires. Keep the suite small around critical end-to-end behavior, then use lower-cost checks for large validation matrices.

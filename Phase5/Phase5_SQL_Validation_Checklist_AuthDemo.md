@@ -52,3 +52,9 @@ Because logout doesn’t change DB in this demo, validate:
 ## E) Reporting evidence
 - [ ] Save SQL outputs (before/after) as evidence
 - [ ] Link them to the scenario IDs (e.g., TC-API-001)
+
+## Theory: validate both change and non-change
+
+A registration test should prove that the intended row was created exactly once and that invalid or duplicate input did not create another row. A login or logout test has a different expected database result: user data should remain unchanged while session state changes outside this table. Defining what must change and what must remain stable catches unintended side effects.
+
+Use the database constraints as part of the model, not just as a cleanup mechanism. A unique index protects correctness under concurrent requests where a prior read-before-write check can race. Normalize values consistently, verify relationships where present, and use the application response and session checks alongside SQL evidence.

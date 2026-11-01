@@ -36,3 +36,11 @@
 ## Reporting guidance
 - Prefer generic error messages.
 - Ensure UI doesn’t render unsanitized user-supplied strings.
+
+## Theory: validate input and encode output at different boundaries
+
+Input validation checks whether a value is acceptable for the business rule; output encoding prevents data from being interpreted as executable markup when it is displayed. Validation alone is not a reliable XSS defense because data can reach a different rendering context or enter through another path. Test encoding where user-controlled data is actually rendered, and verify that it remains text in that context.
+
+Authorization must be checked on every protected request, not only by hiding a link or redirecting from the main page. Session tests should verify the same browser context before login, after login, and after logout. Generic credential errors reduce one disclosure channel but do not replace throttling, monitoring, or secure session handling.
+
+The cases are defensive checks, not a complete penetration test. Define the approved scope and environment before adding security probes, and record limitations such as untested roles or infrastructure controls.

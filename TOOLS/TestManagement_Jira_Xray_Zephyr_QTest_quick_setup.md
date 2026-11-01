@@ -18,3 +18,9 @@ Practice mapping test cases and defects to a workflow.
 ## Evidence to save
 - Screenshots of created items in the tool
 - Exported IDs/links (no secrets)
+
+## Theory: traceability connects intent to evidence
+
+A test management system helps keep requirements, risks, cases, executions, and defects connected. This trace lets a team see which important behaviors have evidence, which failures block a requirement, and what changed after a fix. It also makes scope gaps visible before a release decision.
+
+Keep cases focused and results tied to a specific build and environment. Avoid creating test records only to increase counts; each case should have a clear purpose, repeatable setup, and observable expected result. Attach evidence with sensitive values removed.

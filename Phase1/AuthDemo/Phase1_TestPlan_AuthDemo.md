@@ -87,3 +87,20 @@ For failures:
 - Browser console errors (if any)
 - Which credential/input was used
 
+## 10) Theory: why this plan is structured this way
+
+### Model the journey as states and transitions
+Registration, authentication, protected access, and logout form a stateful workflow. A test should name its starting state and prove the intended transition. For example, “dashboard requires login” starts with a fresh unauthenticated session; “logout clears session” starts authenticated and then checks a protected request using the former browser session. Explicit state prevents a test from passing accidentally because another test left data or cookies behind.
+
+### Derive cases from risks and input classes
+The listed examples cover distinct partitions: valid and invalid email, acceptable and too-short passwords, unique and duplicate identities, active and inactive accounts, and authenticated versus anonymous sessions. Boundary tests should exercise values just below, at, and above a stated limit. The password rule here has an eight-character lower bound, so those values are more informative than three arbitrary short examples.
+
+### Define an oracle for every claim
+“Login failed” should be verified through both the displayed result and the absence of an authenticated state. “Registration succeeded” should be checked by a later login or a safe database assertion, not only by a message. For security-related cases, compare outcomes and timing cautiously: generic text helps reduce account enumeration, while rate limiting and monitoring address repeated guesses.
+
+### Keep evidence and test data controlled
+A reproducible report records the build, browser, database state, steps, and observed result. Use dedicated test accounts and avoid storing passwords, session cookies, or other secrets in screenshots and logs. Reset or uniquely name data so repeated runs do not turn a first-run scenario into a duplicate-account scenario.
+
+### Exit criteria express residual risk
+Passing tests means the selected checks passed in the stated environment; it does not establish that no defects remain. Exit decisions combine critical-path results, unresolved defect impact, untested scope, and the release owner's risk acceptance. Record exclusions explicitly so stakeholders know what evidence is missing.
+

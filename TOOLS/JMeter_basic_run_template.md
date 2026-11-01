@@ -18,3 +18,9 @@ Practice running a lightweight load test.
 ## Evidence
 - Export HTML dashboard report
 - Save results `.jtl`
+
+## Theory: validate one request before adding load
+
+A load test measures a configured workload, so first confirm that one sampler reaches the intended application action and produces the expected response. The Phase 8 JMX file is an empty starter and needs samplers, assertions, and data configuration before it can generate useful evidence. For AuthDemo form posts, send the HX-Request header required by the server handler.
+
+Keep the test plan's throughput and data behavior in mind: repeated registrations with one identity mostly measure duplicate handling, while a growing set of unique identities changes database state over time. Define a realistic workload and pass threshold before interpreting aggregate results.

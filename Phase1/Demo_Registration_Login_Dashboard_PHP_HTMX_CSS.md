@@ -514,3 +514,22 @@ Use the skills you learned to create a simple test strategy:
 - Session validation: dashboard requires login
 
 If you want, I can also generate a **Phase 1 test scenario list** for this exact demo screens.
+
+## Theory behind the demo
+
+### The browser is not a trust boundary
+HTML constraints such as required fields and minimum length improve feedback, but a client can be bypassed. The server must repeat validation before it changes data or grants access. This gives two distinct test layers: check that the browser guides ordinary users, and check that direct or malformed requests are still rejected safely.
+
+### Identity, credentials, and sessions are different things
+A password is a credential used to establish identity. The database should retain a one-way password hash, not a reversible copy of the password; PHP password hashing also stores parameters needed to verify and later upgrade the hash. After successful verification, the server associates a session identifier with the authenticated user. The browser carries that identifier on later requests, so it functions like a temporary bearer credential and must be protected.
+
+For a production design, review secure cookie attributes, HTTPS, session identifier rotation after authentication, expiration, server-side invalidation at logout, CSRF defenses for state-changing requests, and throttling of repeated attempts. These controls address separate threats; a generic error message alone does not stop guessing or protect a stolen session.
+
+### Data constraints and request handling
+Parameterized SQL separates values from SQL syntax, reducing injection risk. A unique database constraint is still needed for email because two concurrent registrations can both pass an earlier “does this email exist?” check. The constraint is the final authority for uniqueness. Normalize values consistently before validation and persistence, then test that the same identity is treated consistently at registration and login.
+
+### HTMX changes the response shape, not the security model
+An HTMX request asks the server for an HTML fragment that can replace part of the page. The server still owns validation, authorization, persistence, and error semantics. Tests should therefore verify both the fragment shown to the user and the durable state behind it; a success message alone does not prove that a user was stored correctly.
+
+### Treat the sample as a learning model
+The compact example demonstrates a request path and several important safeguards, but it omits controls needed for a hardened deployment. Use it to reason about trust boundaries and derive tests, then compare the implementation with the application's actual security requirements before reuse.

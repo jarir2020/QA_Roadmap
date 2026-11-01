@@ -30,3 +30,9 @@ You can test these using Postman/Insomnia or curl.
 13. Ensure successful login creates a usable session cookie
 14. Ensure error responses target only `#form-result` (behavioral verification)
 15. Repeat requests do not corrupt session state
+
+## Theory: scenarios define protocol-level risks
+
+An HTTP scenario is defined by more than a URL: method, headers, body encoding, cookies, and server state all affect the path taken. Because this demo's form handlers are HTMX-aware, preserve the HX-Request header when testing the form action with curl or Postman. Otherwise the request may only retrieve a full page instead of exercising registration or login.
+
+The login-to-dashboard journey also tests continuity across requests. The browser normally carries the session cookie automatically; a command-line client must store and replay it explicitly. Compare anonymous, authenticated, and invalidated states to check the authorization boundary.

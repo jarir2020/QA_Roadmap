@@ -53,3 +53,11 @@ FROM users
 WHERE email = :email
 ;
 ```
+
+## Theory: query results are assertions about invariants
+
+A database validation query should correspond to a stated requirement. The uniqueness query checks a table-wide invariant; the per-email queries check the outcome for one test identity. Run the same query before and after the action and interpret the difference in light of the starting state.
+
+The `:email` notation is a placeholder for a bound parameter in application code or a SQL client that supports named parameters; many command-line consoles do not substitute it automatically. Replace it safely for a manual query or use a prepared statement in code. Avoid `SELECT *` in evidence because it can expose fields that are irrelevant or sensitive.
+
+These queries inspect persistence, not the complete feature. A valid row does not establish that the session was created, that the user can access only their own data, or that a failure response was safe.

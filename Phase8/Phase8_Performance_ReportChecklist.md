@@ -22,3 +22,9 @@
 ## Recommendation section
 - Suggest fixes for bottlenecks (DB indexes, caching, auth throttling)
 - Identify next test (e.g., different thread ramp / caching warm-up)
+
+## Theory: interpret distributions and saturation
+
+Average response time can hide a slow tail. The 95th percentile describes a point below which 95% of measured requests completed; p99 highlights rarer slow experiences when the sample is large enough to support it. Always report sample size and workload, since percentiles from a tiny run are unstable.
+
+Read latency, throughput, and errors together. Rising latency with flattening throughput can indicate saturation; rising errors can show that the service is rejecting or failing work. These are clues, not diagnoses: correlate them with application, database, and load-generator observations before recommending a fix. A slow load generator can make a healthy service appear underutilized.

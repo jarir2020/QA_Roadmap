@@ -26,3 +26,9 @@
 - [ ] no duplicates created
 
 ## Notes / Risks
+
+## Theory: database evidence proves persistence properties
+
+A before-and-after snapshot helps separate a visible response from a persisted change. Compare the row count and the specific test identity, then verify required invariants such as uniqueness, normalized email, active status, and timestamp behavior. For an invalid or duplicate registration, the expected evidence is that no unintended row was added.
+
+A stored password hash is evidence that a derived credential was persisted; never copy the hash itself into a report unless there is a specific, protected reason. Do not include plaintext passwords, session cookies, or unrelated user records in evidence. Capture only the fields needed to support the assertion.

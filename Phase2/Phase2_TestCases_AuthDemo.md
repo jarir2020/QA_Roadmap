@@ -143,3 +143,11 @@ Copy/paste when reporting issues.
 
 **Notes / Workaround:**
 
+## Theory: authentication tests assert transitions, not just pages
+
+Each case crosses a trust boundary or changes authentication state. The registration cases test validation and uniqueness; login cases test credential verification without exposing whether an account exists; dashboard cases test authorization; logout tests revocation of the current session. A page rendering is only one observation and may not prove the underlying state is correct.
+
+For high-value cases, use layered oracles: the visible message or navigation, the HTTP behavior where relevant, and the resulting session or database state. Keep inputs and state independent between cases. In particular, run anonymous-access checks with a clean session and verify logout by requesting protected content again with the same former browser session.
+
+The exact messages in this document are acceptance examples for the current demo. If requirements change, update the expected result and preserve the security property being tested—for example, equivalent failure behavior for unknown email and incorrect password.
+

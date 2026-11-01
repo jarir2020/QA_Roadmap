@@ -44,3 +44,11 @@ If you use a UI test runner later:
 ## Tool suggestions (optional)
 - PHP unit testing: PHPUnit
 - Integration approach: test DB + transactions or cleanup
+
+## Theory: choose the test level by dependency boundary
+
+A true unit test isolates the behavior under test from the database and session environment, often through a seam or test double. The current AuthDemo registration and login functions call the database directly and login mutates session state, so invoking them against a real MySQL database is an integration test unless those dependencies are isolated.
+
+Integration checks should verify the contract between layers: validation, unique constraints, persistence, and session state. Use a dedicated test database and deterministic cleanup; never let a test write to production data. Component/UI checks should assert the user's visible result while avoiding duplication of every low-level validation case.
+
+Test doubles help control failure conditions and time, but they can diverge from real infrastructure. Keep at least a small number of integration checks against the actual database schema and constraints.

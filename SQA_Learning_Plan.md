@@ -4,6 +4,14 @@ This roadmap is designed for a Full-Stack Developer moving toward SQA / QA Autom
 
 The goal is not to learn every tool equally. Learn the testing concepts first, then master a practical core stack, and explore alternatives when a project or job requires them.
 
+## Theory model of the roadmap
+
+Quality work is a feedback loop: understand a requirement, identify how failure could affect a user, choose an observable check, compare evidence with an expectation, and use the result to improve the product or reduce uncertainty. Testing can reveal defects and risk; it cannot prove their absence because the possible inputs, states, environments, and interactions are too numerous to exhaust.
+
+The phases add complementary evidence layers. Unit and component checks localize logic problems; integration checks examine boundaries such as application-to-database behavior; system and browser checks cover user journeys; non-functional checks examine qualities such as accessibility, performance, and security. No single layer substitutes for the others. A balanced strategy spends more depth on high-impact risks while keeping broad, repeatable feedback affordable.
+
+Coverage should name its model: requirements, scenarios, input classes, branches, platforms, or code. Always pair a coverage claim with scope and exclusions. A percentage or green report describes selected checks in a defined run; it is not a general quality score.
+
 ## Roadmap at a glance
 
 Estimated duration
