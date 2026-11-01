@@ -1,0 +1,30 @@
+# Postman / Newman (AuthDemo) — minimal coverage
+
+## Goal
+Practice sending login/register requests and validating responses during Phase 4/6 work.
+
+## Minimal approach (no Postman export required)
+Use curl to simulate what Postman/Newman would send, then later paste into Postman:
+
+### Register
+- endpoint: `POST http://127.0.0.1:8030/register.php`
+- form: `email`, `password`
+
+### Login
+- endpoint: `POST http://127.0.0.1:8030/login.php`
+- form: `email`, `password`
+
+### Dashboard
+- endpoint: `GET http://127.0.0.1:8030/dashboard.php`
+- cookies: session cookie from login
+
+## What to verify
+- Registration returns success/failure in HTML
+- Wrong login returns generic error
+- Dashboard access requires session
+
+## Newman (how to run)
+If you create an exported Postman collection (`collection.json`), run:
+```bash
+newman run collection.json -e env.json
+```
