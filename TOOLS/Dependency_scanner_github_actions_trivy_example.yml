@@ -1,0 +1,16 @@
+name: Trivy dependency scan (example)
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Trivy
+        run: |
+          docker run --rm -v "${{ github.workspace }}:/repo" aquasec/trivy:latest fs /repo
