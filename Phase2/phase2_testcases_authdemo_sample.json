@@ -1,0 +1,25 @@
+{
+  "testcases": [
+    {
+      "id": "TC-001",
+      "title": "Register with valid inputs",
+      "preconditions": "none",
+      "steps": ["Open /register.php","Fill valid email","Fill password minlength >= 8","Submit"],
+      "expected": "Registration successful message shown in #form-result"
+    },
+    {
+      "id": "TC-006",
+      "title": "Login wrong password",
+      "preconditions": "User exists",
+      "steps": ["Open /login.php","Enter email","Enter wrong password","Submit"],
+      "expected": "Invalid email or password shown"
+    },
+    {
+      "id": "TC-008",
+      "title": "Dashboard requires login",
+      "preconditions": "Logged out",
+      "steps": ["Open /dashboard.php"],
+      "expected": "Redirect or navigation to /login.php"
+    }
+  ]
+}

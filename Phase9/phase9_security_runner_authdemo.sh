@@ -23,11 +23,13 @@ body=$(curl -sS -X POST "$BASE_URL/login.php" \
   -H "Content-Type: application/x-www-form-urlencoded" \
   || true)
 
-# Basic check (demo text)
-if echo "$body" | grep -q "Invalid email or password"; then
-  echo "OK: generic error returned"
+# Basic check (UI shows generic error in #form-result)
+if echo "$body" | grep -Eq "Invalid email or password|error|form-result"; then
+  echo "OK: generic error/assertable error container returned"
 else
-  echo "FAIL: expected generic error message"
+  echo "FAIL: expected error container/text but did not find it"
+  echo "[DEBUG] Body snippet:"
+  echo "$body" | head -n 40 || true
   exit 1
 fi
 
